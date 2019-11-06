@@ -4,7 +4,6 @@ import (
 	"log"
 	"os"
 	"text/template"
-	"time"
 )
 
 var tpl *template.Template
@@ -24,20 +23,21 @@ func init() {
 
 	//創建模板並解析模板定義(Funcs須在此函式之前使用)
 	//func (t *Template) ParseFiles(filenames ...string) (*Template, error)
-	tpl = template.Must(template.New("").Funcs(fm).ParseFiles("tpl.gohtml"))
-}
-
-//function
-func monthDayYear(t time.Time) string {
-	return t.Format("06-11-2019")
-}
-
-var fm = template.FuncMap{
-	"fdateMDY": monthDayYear,
+	tpl = template.Must(template.ParseFiles("tpl.gohtml"))
 }
 
 func main() {
-	err := tpl.ExecuteTemplate(os.Stdout, "tpl.gohtml", time.Now())
+
+	//struct
+	g1 := struct {
+		Score1 int
+		Score2 int
+	}{
+		7,
+		9,
+	}
+
+	err := tpl.ExecuteTemplate(os.Stdout, "tpl.gohtml", g1)
 	if err != nil {
 		log.Fatalln(err)
 	}

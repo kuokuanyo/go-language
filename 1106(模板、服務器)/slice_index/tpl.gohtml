@@ -6,14 +6,10 @@
 </head>
 <body>
 
-	{{range .Wisdom}}
-	{{uc .Name}}
-	{{end}}
-
-	{{range .Wisdom}}
-	{{ft .Name}}
-	{{end}}
-</ul>
+	{{index .Words 0}}
+	{{index .Words 1}}
+	{{index .Words 2}}
+	{{index .Lname}}
 
 </body>
 </html>

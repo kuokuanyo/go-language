@@ -6,11 +6,13 @@
 </head>
 <body>
 
-	Without date format: {{.}}
+	{{.}}
 
-	With date format: {{fdateMDY .}}
+	{{. | fdbl}}
+
+	{{. | fdbl | fsq}}
 	
-</ul>
+	{{. | fdbl | fsq | fsqrt}}
 
 </body>
 </html>
