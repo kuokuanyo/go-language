@@ -17,9 +17,17 @@ func main() {
 
 	//func Handle(pattern string, handler Handler)
 	//第一種應為
-	http.Handle("/", foo)
-	http.Handle("/dog/", bar)
-	http.Handle("/me/", myname)
+	//轉換函式類型(使用上列的第一種)
+	http.Handle("/", http.HandlerFunc(foo))
+	http.Handle("/dog/", http.HandlerFunc(bar))
+	http.Handle("/me/", http.HandlerFunc(myname))
+
+	/*
+	   如果要用上面的第二種
+	   func HandleFunc("/", (foo)
+	   func HandleFunc("/dog/", bar)
+	   func HandleFunc("/me/", myname)
+	*/
 
 	//func ListenAndServe(addr string, handler Handler) error
 	http.ListenAndServe(":8080", nil)
