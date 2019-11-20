@@ -154,7 +154,7 @@ func login(w http.ResponseWriter, r *http.Request) {
 	var error Error
 
 	//decode
-	json.NewDecoder(r.Body).Decode(user)
+	json.NewDecoder(r.Body).Decode(&user)
 
 	if user.Email == "" {
 		//respond error
