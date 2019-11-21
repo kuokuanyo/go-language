@@ -171,7 +171,7 @@ func login(w http.ResponseWriter, r *http.Request) {
 	}
 
 	password := user.Password
-	fmt.Println(password)
+
 	//尋找是否有符合的email
 	row := db.QueryRow("select * from users where email=?", user.Email)
 	//印在user資料上
@@ -188,9 +188,10 @@ func login(w http.ResponseWriter, r *http.Request) {
 	}
 
 	hashedPassword := user.Password
-	fmt.Println(hashedPassword)
+
 	//比較密碼是否符合
 	//func CompareHashAndPassword(hashedPassword, password []byte) error
+	//亂碼的密碼與純文本密碼比較
 	err = bcrypt.CompareHashAndPassword([]byte(hashedPassword), []byte(password))
 	//假設密碼不符
 	if err != nil {
@@ -199,6 +200,7 @@ func login(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	//create token
 	token, err := GenerateToken(user)
 	if err != nil {
 		log.Fatal(err)
@@ -224,11 +226,21 @@ func TokenVerifyMiddleWare(next http.HandlerFunc) http.HandlerFunc {
 
 		if len(bearerToken) == 2 {
 			//保留第二個值
+			//token值
 			authHeader := bearerToken[1]
 
-			//jwt解析
+			//jwt解析並驗證
 			//func Parse(tokenString string, keyFunc Keyfunc) (*Token, error)
 			token, error := jwt.Parse(authHeader, func(token *jwt.Token) (interface{}, error) {
+				/*
+									type Token struct {
+					    Raw       string                 // The raw token.  Populated when you Parse a token
+					    Method    SigningMethod          // The signing method used or to be used
+					    Header    map[string]interface{} // The first segment of the token
+					    Claims    Claims                 // The second segment of the token
+					    Signature string                 // The third segment of the token.  Populated when you Parse a token
+					    Valid     bool                   // Is the token valid?  Populated when you Parse/Verify a token
+					}*/
 				if _, ok := token.Method.(*jwt.SigningMethodHMAC); !ok {
 					return nil, fmt.Errorf("There was an error.")
 				}
